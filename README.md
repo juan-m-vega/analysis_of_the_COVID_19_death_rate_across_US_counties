@@ -8,14 +8,14 @@ This project will explore county-level variables related to COVID-19 and populat
 
 The following data sources were used in this analysis. Please download them and place these files in your `data` folder to execute the notebooks used in this analysis:
 * [Annual County Resident Population Estimates by Age, Sex, Race, and Hispanic Origin: April 1, 2010 to July 1, 2019 (CC-EST2019-ALLDATA) for the United States](https://www.census.gov/data/tables/time-series/demo/popest/2010s-counties-detail.html)
-* [Election Data from MIT](https://electionlab.mit.edu/data)
+* [Election Data from MIT](https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/VOQCHQ)
 * [Current Hospital Capacity Estimates – Snapshot](https://www.cdc.gov/nhsn/covid19/report-patient-impact.html) - Please download the national and state estimates NHSN COVID-19 Modulde data
 * [COVID-19 Vaccinations in the United States by County from the CDC](https://data.cdc.gov/Vaccinations/COVID-19-Vaccinations-in-the-United-States-County/8xkx-amqh)
 * [Labor force data by county, 2020 annual averages from the Bureau of Labor Statistics](https://www.bls.gov/lau/)
 * [COVID-19 Case Surveillance Public Use Data with Geography from the CDC](https://data.cdc.gov/Case-Surveillance/COVID-19-Case-Surveillance-Public-Use-Data-with-Ge/n8mc-b4w4)
 * [Mask use by county from the New York Times](https://github.com/nytimes/covid-19-data/tree/master/mask-use)
 * [Number of deaths per county from the New York Times (`us-counties-recent.csv`)](https://github.com/nytimes/covid-19-data)
-* [United States COVID-19 County Level of Community Transmission as Originally Posted](https://data.cdc.gov/Public-Health-Surveillance/United-States-COVID-19-County-Level-of-Community-T/8396-v7yb)
+* [United States COVID-19 County Level of Community Transmission Historical Changes](https://data.cdc.gov/Public-Health-Surveillance/United-States-COVID-19-County-Level-of-Community-T/nra9-vzzn)
 * [COVID-19 Reported Patient Impact and Hospital Capacity by Facility](https://healthdata.gov/Hospital/COVID-19-Reported-Patient-Impact-and-Hospital-Capa/anag-cw7u)
 * [County population characteristics](https://www.openintro.org/data/?data=county_complete)
 
@@ -75,21 +75,21 @@ The following data sources were used in this analysis. Please download them and 
 | minority_group_total | Total of all minority columns |
 
 ### Data  
-We started by looking at CDC data on the general characteristics of COVID cases county wide. This dataset would be the foundational data that we add on additional valuable features, recorded and engineered from other publicly available data. This other data was provided by governmental organizations such as the Center for Control and Disease, the U.S. Bureau of Labor Statistics, and the United States Census Bureau. When dealing with any sort of public record data, we were privy to the knowledge that this data is very dirty and often requires a lot of cleaning to perform exploratory data analysis (EDA) and possible modeling. 
+We started by looking at CDC data on the general characteristics of COVID cases county wide. This dataset would be the foundational data that we add on additional valuable features, recorded and engineered from other publicly available data. This other data was provided by governmental organizations such as the Center for Control and Disease, the U.S. Bureau of Labor Statistics, and the United States Census Bureau. When dealing with any sort of public record data, we were privy to the knowledge that this data is very dirty and often requires a lot of cleaning to perform exploratory data analysis (EDA) and possible modeling.
 
 We took each dataset that we found, identified any null features or values, engineered additional features, and performed simple EDA for cursory analysis. We then merged all the relevant data into one complete set that we would perform final EDA and modeling with. Our data is indexed with the US county it originates from; the numerical values equating to the mean of values from that county over a brief window of time. We ultimately created a Dataframe with 3,133 observations of 54 rows.
 
 ### EDA
 
-Upon initial examination of our deaths variable, we see that it is highly skewed left which leads us to change our target variable to be number of deaths per 100k residents in a county. This variable follows a much more normal distribution and will be better for our modeling process down the road. While examining the target variables relationship with the rest of our data, we observed strong linear relationships with both county population, and number of deaths. 
+Upon initial examination of our deaths variable, we see that it is highly skewed left which leads us to change our target variable to be number of deaths per 100k residents in a county. This variable follows a much more normal distribution and will be better for our modeling process down the road. While examining the target variables relationship with the rest of our data, we observed strong linear relationships with both county population, and number of deaths.
 
-Because the pandemic has been so widely politicized, a lot of our exploratory analysis was done through a political lense, and across a wide variety. Counties that had >50% of their votes go to Trump had on average 333 deaths per 100k residents, while counties with >50% of their votes going to Biden had on average 249 deaths per 100k residents. 
+Because the pandemic has been so widely politicized, a lot of our exploratory analysis was done through a political lense, and across a wide variety. Counties that had >50% of their votes go to Trump had on average 333 deaths per 100k residents, while counties with >50% of their votes going to Biden had on average 249 deaths per 100k residents.
 
 ![cases vs deaths](./assets/trump_v_death.png)
 
 We also noted the presence of a relationship between a counties percentage of minority residents and the number of deaths per 100k residents, which lead us to believe that it was possible that minorities are being disproportionately impacted by covid-19.
 
-As of January, 2022, there have been 878,000 deaths due to COVID-19 in the United States. The coronavirus, which first was discovered in the United States in January 2020, has created a public health emergency that prompted the development of new vaccines to prevent the spread of this virus. The plot below shows that the number of COVID-19 cases across all U.S. counties as reported by the CDC’s case surveillance data set have increased significantly between 1/20 to 12/21, reaching a peak on 12/20. The number of cases dropped significantly in 2021, as several COVID-19 vaccines became widely available across the United States. 
+As of January, 2022, there have been 878,000 deaths due to COVID-19 in the United States. The coronavirus, which first was discovered in the United States in January 2020, has created a public health emergency that prompted the development of new vaccines to prevent the spread of this virus. The plot below shows that the number of COVID-19 cases across all U.S. counties as reported by the CDC’s case surveillance data set have increased significantly between 1/20 to 12/21, reaching a peak on 12/20. The number of cases dropped significantly in 2021, as several COVID-19 vaccines became widely available across the United States.
 
 ![image](./assets/juan_1.png)
 
@@ -116,7 +116,7 @@ In addition to exploring vaccine uptake among U.S. county residents, it appears 
 ### Methodology:
 
 Modeling
-	When taking into consideration the dataset being used and the target variable we chose, we deemed it appropriate to try and model the variables in order to predict the target when it comes to ingesting new data. The idea here was to use sklearn’s principal component analysis (PCA) to identify key features from our data that correlate heavily with the target value without being heavily correlated with each other. These variables would then be fitted to a model that would give us a score. This score is the precision predicting the binary target variable which is if a county falls into the 75th percentile of deaths per 100,000 people. 
+	When taking into consideration the dataset being used and the target variable we chose, we deemed it appropriate to try and model the variables in order to predict the target when it comes to ingesting new data. The idea here was to use sklearn’s principal component analysis (PCA) to identify key features from our data that correlate heavily with the target value without being heavily correlated with each other. These variables would then be fitted to a model that would give us a score. This score is the precision predicting the binary target variable which is if a county falls into the 75th percentile of deaths per 100,000 people.
 
 ### Results:
 
@@ -126,13 +126,7 @@ Modeling
 ### Conclusion:
 
 Modeling
-    Because of the meager difference between our baseline precision score and the modeled precision score, we conclude that Logistic Regression modeling will not be strong enough to predict the 75th percentile of county COVID deaths per 100,000 people when fed new data. Recommendations would come from exploratory analysis of model coefficients and data variables about best practices going forward in counties hit hardest by COVID. 
+    Because of the meager difference between our baseline precision score and the modeled precision score, we conclude that Logistic Regression modeling will not be strong enough to predict the 75th percentile of county COVID deaths per 100,000 people when fed new data. Recommendations would come from exploratory analysis of model coefficients and data variables about best practices going forward in counties hit hardest by COVID.
 
-### Further Analysis - Modeling 
-   A majority of the data collected was recorded over different timeframes and only provides a small window in time to the amount of data available. Were we to try modeling again, we would need more data samples over a longer period of time to properly observe changes in order to best predict outcomes of a county's population. Given this is a relatively recent national phenomenon with a shorter timespan, changing data collection implementations, and an evolving cause of problems,  data is a scarcity. 
-
-
-
-
-
-
+### Further Analysis - Modeling
+   A majority of the data collected was recorded over different timeframes and only provides a small window in time to the amount of data available. Were we to try modeling again, we would need more data samples over a longer period of time to properly observe changes in order to best predict outcomes of a county's population. Given this is a relatively recent national phenomenon with a shorter timespan, changing data collection implementations, and an evolving cause of problems,  data is a scarcity.
